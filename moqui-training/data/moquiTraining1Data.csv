@@ -1,0 +1,5 @@
+org.moqui.Training,demo
+trainingId,trainingName,trainingDate,trainingPrice,trainingDuration
+T4,Moqui4,2023-12-12,20000,5
+T5,Moqui5,2023-12-12,20000,6
+T6,Moqui6,2023-12-12,20000,7

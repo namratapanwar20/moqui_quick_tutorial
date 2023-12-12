@@ -1,0 +1,28 @@
+[
+  {"_dataType": "demo"},
+  {
+    "_entity": "Training",
+    "trainingId": "T1",
+    "trainingName": "Moqui",
+    "trainingDate": "2023-12-12",
+    "trainingPrice": "20000",
+    "trainingDuration": 2
+  },
+  {
+    "_entity": "Training",
+    "trainingId": "T2",
+    "trainingName": "Moqui2",
+    "trainingDate": "2023-12-12",
+    "trainingPrice": "20000",
+    "trainingDuration": 3
+  },
+  {
+    "_entity": "Training",
+    "trainingId": "T3",
+    "trainingName": "Moqui3",
+    "trainingDate": "2023-12-12",
+    "trainingPrice": "20000",
+    "trainingDuration": 4
+  }
+
+]
