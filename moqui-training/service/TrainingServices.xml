@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+    <service verb="create" type="entity-auto" noun="Training">
+        <description>
+            1. The entity-auto service for creating records.
+        </description>
+        <in-parameters>
+            <auto-parameters entity-name="org.moqui.Training"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="trainingId"/>
+        </out-parameters>
+    </service>
+    <service verb="create" noun="Id">
+        <description>
+            2. Service with default-type to create records for the entity
+        </description>
+        <in-parameters>
+            <auto-parameters entity-name="org.moqui.Training" include="nonpk"/>
+            <parameter name="trainingId" required="true"/>
+        </in-parameters>
+        <out-parameters><parameter name="trainingId"/></out-parameters>
+        <actions>
+            <service-call name="create#org.moqui.Training" in-map="context" out-map="context"/>
+        </actions>
+    </service>
+    <service verb="create" noun="MoquiTrainingGroovy" type="script"
+             location="component://moqui-training/service/Training.groovy">
+        <description>
+            3. Service with implementation logic in a groovy script to create data.
+        </description>
+        <in-parameters>
+            <auto-parameters entity-name="org.moqui.Training"/>
+            <parameter name="trainingId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="trainingId"/>
+        </out-parameters>
+    </service>
+</services>
