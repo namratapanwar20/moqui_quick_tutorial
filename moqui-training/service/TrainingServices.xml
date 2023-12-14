@@ -38,4 +38,45 @@
             <parameter name="trainingId"/>
         </out-parameters>
     </service>
+    <service verb="get" noun="MoquiRecords">
+        <in-parameters>
+            <parameter name="trainingId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="trainedList"/>
+        </out-parameters>
+
+        <actions>
+            <entity-find entity-name="org.moqui.Training" list="trainedList">
+                <econdition field-name="trainingId"/>
+                <select-field field-name="trainingId, trainingName, trainingDate"/>
+            </entity-find>
+        </actions>
+    </service>
+    <service verb="get" noun="MoquiTraining">
+        <in-parameters>
+            <parameter name="trainingId"/>
+            <parameter name="trainingName" required="true"/>
+            <parameter name="trainingDate" type="Date"/>
+            <parameter name="trainingPrice"/>
+            <parameter name="trainingDuration"/>
+        </in-parameters>
+        <actions>
+            <entity-find-one entity-name="org.moqui.Training" value-field="trainingList">
+                <field-map field-name="trainingName"/>
+            </entity-find-one>
+
+            <if condition="trainingList!=Null " >
+                <then>
+                    <service-call name="update#org.moqui.Training" in-map="context" out-map="context"/>
+                </then>
+                <else>
+                    <service-call name="create#org.moqui.Training" in-map="context" out-map="context"/>
+                </else>
+            </if>
+
+
+
+        </actions>
+    </service>
 </services>

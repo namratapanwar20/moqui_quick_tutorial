@@ -4,7 +4,7 @@
     <entity entity-name="Training" package="org.moqui" short-alias="training">
         <field name="trainingId" type="id" is-pk="true"/>
         <field name="trainingName" type="text-medium"/>
-        <field name="trainingDate" type="date"/>
+        <field name="trainingDate" type="date"  />
         <field name="trainingPrice" type="currency-amount"/>
         <field name="trainingDuration" type="number-integer"/>
     </entity>
