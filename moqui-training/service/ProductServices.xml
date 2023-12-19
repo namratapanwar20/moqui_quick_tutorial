@@ -6,14 +6,41 @@
             <parameter name="productName" entity-name="mantle.product.Product"/>
             <parameter name="description" entity-name="mantle.product.Product"/>
             <parameter name="price" entity-name="mantle.product.ProductPrice"/>
-            <parameter name="priceUomId" entity-name="mantle.product.ProductPrice" default="USD"/>
+            <parameter name="priceUomId" entity-name="mantle.product.ProductPrice"/>
         </in-parameters>
         <out-parameters>
             <parameter name="productId" entity-name="mantle.product.ProductPrice"/>
         </out-parameters>
         <actions>
+            <if condition="price">
+                <if condition="!priceUomId">
+                    <return message="priceUomId is needed for product price" error="true"/>
+                </if>
+            </if>
             <service-call name="create#Product" in-map="context" out-map="context"/>
             <service-call name="create#ProductPrice" in-map="context" out-map="context"/>
+        </actions>
+    </service>
+    <service verb="get" noun="Product1">
+        <in-parameters>
+            <auto-parameters entity-name="mantle.product.Product" include="pk"/>
+            <parameter name="productId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="productList"/>
+            <parameter name="productList1"/>
+        </out-parameters>
+        <actions>
+            <if condition="productId">
+                <entity-find entity-name="mantle.product.Product" list="productList">
+                    <econdition field-name="productId"/>
+                    <select-field field-name="productName,description"/>
+                </entity-find>
+                <entity-find entity-name="mantle.product.ProductPrice" list="productList1">
+                    <econdition field-name="productId"/>
+                    <select-field field-name="productId,price,priceUomId"/>
+                </entity-find>
+            </if>
         </actions>
     </service>
 </services>
