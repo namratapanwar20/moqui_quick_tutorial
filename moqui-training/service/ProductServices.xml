@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+    <service verb="create"  noun="Product">
+        <in-parameters>
+            <parameter name="productName" entity-name="mantle.product.Product"/>
+            <parameter name="description" entity-name="mantle.product.Product"/>
+            <parameter name="price" entity-name="mantle.product.ProductPrice"/>
+            <parameter name="priceUomId" entity-name="mantle.product.ProductPrice" default="USD"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="productId" entity-name="mantle.product.ProductPrice"/>
+        </out-parameters>
+        <actions>
+            <service-call name="create#Product" in-map="context" out-map="context"/>
+            <service-call name="create#ProductPrice" in-map="context" out-map="context"/>
+        </actions>
+    </service>
+</services>

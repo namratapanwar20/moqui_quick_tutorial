@@ -64,6 +64,7 @@
         <actions>
             <entity-find-one entity-name="org.moqui.Training" value-field="trainingList">
                 <field-map field-name="trainingName"/>
+                <field-map field-name="trainingId"/>
             </entity-find-one>
 
             <if condition="trainingList!=Null " >
@@ -74,9 +75,6 @@
                     <service-call name="create#org.moqui.Training" in-map="context" out-map="context"/>
                 </else>
             </if>
-
-
-
         </actions>
     </service>
 </services>
