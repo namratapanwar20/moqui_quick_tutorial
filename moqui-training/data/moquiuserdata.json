@@ -1,0 +1,22 @@
+[
+  {"_dataType": "demo"},
+  {
+    "_entity": "User",
+    "userId": "U1",
+    "userName": "User1",
+    "trainingId": "T1"
+  },
+  {
+    "_entity": "User",
+    "userId": "U2",
+    "userName": "User2",
+    "trainingId": "T2"
+  },
+  {
+    "_entity": "User",
+    "userId": "U3",
+    "userName": "User3",
+    "trainingId": "T3"
+  }
+
+]
