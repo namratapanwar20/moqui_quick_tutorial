@@ -2,7 +2,7 @@
 <screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-2.1.xsd">
     <transition name="createTutorial">
-        <service-call name="create#tutorial.Tutorial"/>
+        <service-call name="tutorial.TutorialServices.create#Tutorial"/>
         <default-response url="."/>
     </transition>
     <actions>
