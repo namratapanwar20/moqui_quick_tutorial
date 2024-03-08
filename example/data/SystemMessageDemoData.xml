@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-facade-xml type="demo">
+    <moqui.service.message.SystemMessageType systemMessageTypeId="Demo_User_message"  description="democreated"
+                                             consumeServiceName="moqui.integration.DemoSystemMessageServices.consume#DemoUserMessage"
+                                             sendPath="/users/5850448"/>
+
+    <moqui.service.message.SystemMessageRemote systemMessageRemoteId="Demo_Remote" description="demoremote"
+                                               sendUrl="https://gorest.co.in/public-api" username="" password=""/>
+
+    <moqui.service.job.ServiceJob  jobName="DemoUser_Poll" description="Poll service for creating user"
+                                   serviceName="moqui.integration.DemoSystemMessageServices.poll#DemoUser" cronExpression="0 0/15 * * * ?">
+        <parameters parameterName="systemMessageTypeId" parameterValue="Demo_User_Message"/>
+        <parameters parameterName="systemMessageRemoteId" parameterValue="Demo_Remote"/>
+    </moqui.service.job.ServiceJob>
+</entity-facade-xml>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="poll" noun="DemoUser" authenticate="anonymous-all">
+        <in-parameters>
+            <parameter name="systemMessageTypeId" required="true"/>
+            <parameter name="systemMessageRemoteId" required="true"/>
+        </in-parameters>
+        <actions>
+            <log message="==================inside SMS.poll#DemoUser code ===================="/>
+            <entity-find-one entity-name="moqui.service.message.SystemMessageType" value-field="systemMessageType"/>
+<!--            <if condition="systemMessageType == null">-->
+<!--                <return error="true" message="Could not find SystemMessageType with ID $(systemMessageType.systemMessageTypeId)"/>-->
+<!--            </if>-->
+            <entity-find-one entity-name="moqui.service.message.SystemMessageRemote" value-field="systemMessageRemote"/>\
+            <log message="=============== entity-find-one  ${systemMessageRemote}  ${systemMessageType} ============="/>
+<!--            <if condition="systemMessageRemote == null">-->
+<!--                <return error="true" message="Could not find SystemMessageRemote with Id $(systemMessageRemote.systemMessageRemoteId)"/>-->
+<!--            </if>-->
+
+            <script><![CDATA[
+                import org.moqui.util.RestClient
+
+                String endpoint = systemMessageType.sendPath;
+                String sendUrl = systemMessageRemote.sendUrl;
+D
+                RestClient restClient = ec.service.rest();
+                restClient.method("GET");
+                restClient.uri(sendUrl+endpoint);
+                restClient.contentType("application/json");
+
+                RestClient.RestResponse restResponse=restClient.call();
+                statusCode = restResponse.getStatusCode();
+
+                if (restResponse.statusCode<200 || restResponse.statusCode>=300) {
+                    String errMsg=restResponse.text()
+                    ec.message.addError("System message ${systemMessageId} send error response (${restResponse.statusCode}")
+                    return
+                }
+
+                String responseText = restResponse.text();
+
+                Map<String, Object> result=ec.service.sync().name("org.moqui.impl.SystemMessageServices.receive#IncomingSystemMessage").parameter("systemMessageTypeId", systemMessageType.systemMessageTypeId).parameter("systemMessageRemoteId", systemMessageRemote.systemMessageRemoteId).parameter("messageText",responseText).disableAuthz().requireNewTransaction(true).call()
+
+                ec.logger.info("Demo user all with type ${systemMessageTypeId} and remote ${systemMessageRemoteId} saved response in messages ${result.systemMessage}")
+            ]]></script>
+        </actions>
+    </service>
+
+    <service verb="consume" noun="DemoUserMessage" authenticate="anonymous-all" transaction-timeout="1800">
+        <implements service="org.moqui.impl.SystemMessageServices.consume#SystemMessage"/>
+        <actions>
+            <log message="=========== inside SMS.consume#DemoUserMessage code ==========="/>
+            <entity-find-one entity-name="moqui.service.message.SystemMessage" value-field="systemMessage"/>
+            <if condition="!systemMessage.messageText">
+                <return error="true" message="System message ${systemMessage.systemMessageId} has no message text, no consuming"/>
+            </if>
+
+            <set field="apiResponse" from="new groovy.json.JsonSlurper().parseText(systemMessage.messageText)"/>
+            <log message="============= API-RESPONSE ${apiResponse} =============="/>
+
+            <service-call name="mantle.party.PartyServices.create#Person" in-map="[pseudoId: apiResponse.data.id, firstName:apiResponse.data.name, lastName:apiResponse.data.name]" out-map="context"/>
+        </actions>
+    </service>
+</services>
